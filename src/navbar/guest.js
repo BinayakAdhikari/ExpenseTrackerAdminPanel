@@ -15,9 +15,9 @@ function Guest() {
                     <li className="nav-item">
                         <Link className="nav-link" to="/login">Login</Link>
                     </li>
-                    <li className="nav-item">
+                    {/* <li className="nav-item">
                         <Link className="nav-link" to="/register">Register</Link>
-                    </li>
+                    </li> */}
 
                 </ul>
 
@@ -26,7 +26,7 @@ function Guest() {
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/login" element={<Login />} />
-                    <Route path="/register" element={<Register />} />
+                    {/* <Route path="/register" element={<Register />} /> */}
                 </Routes>
             </div>
         </>
