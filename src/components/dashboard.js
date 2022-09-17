@@ -2,14 +2,17 @@ import { useEffect, useState } from 'react';
 import AuthUser from './AuthUser';
 import React, { Component } from 'react';
 import ModifyModal from './ModifyModal';
+import ModifyKeywordModal from './ModifyKeywordModal';
 
 export default function Dashboard() {
     const { http } = AuthUser();
     const [bankdetails, setUserdetail] = useState('');
     const [keyworddetails, setKeywordDetail] = useState('');
     const [selectedBank, setSelectedBank] = useState(null);
+    const [selectedKeyword, setSelectedKeyword] = useState(null);
     const [selectedAction, setSelectedAction] = useState(null);
     const [shouldShowModal, setShouldShowModal] = useState(false);
+    const [shouldShowKeywordModal, setShouldShowKeywordModal] = useState(false);
 
     useEffect(() => {
         fetchBankDetail();
@@ -34,6 +37,12 @@ export default function Dashboard() {
         setSelectedBank({...bank});
         setSelectedAction(action);
         setShouldShowModal(true);
+    }
+
+    const handleKeywordClick = (keyword, action) => {
+        setSelectedKeyword({...keyword});
+        setSelectedAction(action);
+        setShouldShowKeywordModal(true);
     }
 
     function renderElement() {
@@ -69,6 +78,7 @@ export default function Dashboard() {
                         <tr>
                             <th>Keywords</th>
                             <th>Added By</th>
+                            <th colSpan={2}>Modify</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -76,12 +86,15 @@ export default function Dashboard() {
                             <tr key={keyword._id}>
                                 <td>{keyword.keywordName}</td>
                                 <td>{keyword.addedBy.username}</td>
+                                <td><button type='button' name='Update' onClick={() => handleKeywordClick(keyword, 'update')}>Update</button></td>
+                                <td><button type='button' name='Delete' onClick={() => handleKeywordClick(keyword, 'delete')}>Delete</button></td>
                             </tr>
                         )}
                     </tbody>
                 </table>
             </div>
-            {shouldShowModal && <ModifyModal bank={selectedBank} action={selectedAction} setShouldShowModal = {setShouldShowModal}/>}
+            {shouldShowModal && <ModifyModal bank={selectedBank} action={selectedAction} setShouldShowModal = {setShouldShowModal} shouldShowModal = {shouldShowModal}/>}
+            {shouldShowKeywordModal && <ModifyKeywordModal keyword={selectedKeyword} action={selectedAction} setShouldShowKeywordModal = {setShouldShowKeywordModal} shouldShowKeywordModal = {shouldShowKeywordModal}/>}
             </>
         } else {
             return <p>Loading.....</p>

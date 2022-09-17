@@ -4,13 +4,10 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import axios from 'axios';
 
-import AuthUser from './AuthUser';
-
-const ModifyModal = (props) => {
-    const [bankUpdateDetails, setBankUpdateDetails] = React.useState({
-        bankName: props.bank.bankName,
-        bankAddress: props.bank.bankAddress,
-        id: props.bank._id
+const ModifyKeywordModal = (props) => {
+    const [keywordUpdateDetails, setKeywordUpdateDetails] = React.useState({
+        keywordName: props.keyword.keywordName,
+        id: props.keyword._id
     });
 
     const token = sessionStorage.getItem('token');
@@ -19,12 +16,12 @@ const ModifyModal = (props) => {
     const [isLoading, setIsLoading] = React.useState(false);
 
     const handleClose = () => {
-        props.setShouldShowModal(false);
+        props.setShouldShowKeywordModal(false);
     }
 
     const handleChange = (e) => {
-        setBankUpdateDetails({
-            ...bankUpdateDetails,
+        setKeywordUpdateDetails({
+            ...keywordUpdateDetails,
             [e.target.name]: e.target.value
         });
     }
@@ -36,8 +33,8 @@ const ModifyModal = (props) => {
         try {
             setIsLoading(true);
 
-            const response = await axios.patch("https://expensemonitoring.herokuapp.com/api/v1/banks/bank/" + bankUpdateDetails.id,
-                bankUpdateDetails,
+            const response = await axios.patch("https://expensemonitoring.herokuapp.com/api/v1/keywords/keyword/" + keywordUpdateDetails.id,
+                keywordUpdateDetails,
                 {
                     headers: {
                         "Content-type": "application/json",
@@ -47,7 +44,7 @@ const ModifyModal = (props) => {
 
             if (response.status === 200) {
                 setIsLoading(false);
-                props.setShouldShowModal(false);
+                props.setShouldShowKeywordModal(false);
                 window.location.reload();
             }
         } catch (err) {
@@ -65,17 +62,17 @@ const ModifyModal = (props) => {
         try {
             setIsLoading(true);
 
-            const response = await axios.delete("https://expensemonitoring.herokuapp.com/api/v1/banks/bank/" + bankUpdateDetails.id,
-            {
-                headers: {
-                    "Content-type": "application/json",
-                    "Authorization": `Bearer ${token.replace(/['"]+/g, '')}`
-                }
-            });
+            const response = await axios.delete("https://expensemonitoring.herokuapp.com/api/v1/keywords/keyword/" + keywordUpdateDetails.id,
+                {
+                    headers: {
+                        "Content-type": "application/json",
+                        "Authorization": `Bearer ${token.replace(/['"]+/g, '')}`
+                    }
+                });
 
             if (response.status === 200) {
                 setIsLoading(false);
-                props.setShouldShowModal(false);
+                props.setShouldShowKeywordModal(false);
                 window.location.reload();
             }
         } catch (err) {
@@ -91,14 +88,10 @@ const ModifyModal = (props) => {
             return (
                 <Form method='post' onSubmit={handleSubmit}>
                     <Form.Group className="mb-3" controlId="formBasicEmail">
-                        <Form.Label>Bank Name</Form.Label>
-                        <Form.Control type="text" placeholder="Enter bank" value={bankUpdateDetails.bankName} name= "bankName" onChange={handleChange} />
+                        <Form.Label>Keyword Name</Form.Label>
+                        <Form.Control type="text" placeholder="Enter keyword" value={keywordUpdateDetails.keywordName} name="keywordName" onChange={handleChange} />
                     </Form.Group>
 
-                    <Form.Group className="mb-3" controlId="formBasicPassword">
-                        <Form.Label>Bank Address</Form.Label>
-                        <Form.Control type="text" placeholder="Bank Address" value={bankUpdateDetails.bankAddress} name= "bankAddress" onChange={handleChange} />
-                    </Form.Group>
                     <Button variant="primary" type="submit">
                         {isLoading ? 'Updating...' : 'Update'}
                     </Button>
@@ -122,11 +115,11 @@ const ModifyModal = (props) => {
 
     const actionTitle = props.action === 'update' ? 'Update your details' : 'Delete your details';
 
-    if (!props.shouldShowModal) {
+    if (!props.shouldShowKeywordModal) {
         return <></>;
     }
     return (
-        <Modal show={props.shouldShowModal} onHide={handleClose}>
+        <Modal show={props.shouldShowKeywordModal} onHide={handleClose}>
             <Modal.Header closeButton>
                 <Modal.Title>{actionTitle}</Modal.Title>
             </Modal.Header>
@@ -135,4 +128,4 @@ const ModifyModal = (props) => {
     )
 }
 
-export default ModifyModal
+export default ModifyKeywordModal
